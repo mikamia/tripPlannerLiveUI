@@ -33,8 +33,6 @@ $(document).ready(function(){
       $(this).closest('.day-buttons').find('.day-btn.current-day').removeClass('current-day');
       $(this).addClass('current-day');
       setCurrentDay();
-      console.log(currentDay);
-
     });
 
     //Itinerary Day
@@ -46,6 +44,39 @@ $(document).ready(function(){
       $(lastChild).after(newButton);
       days.push(new Day());
     });
+
+    $(document).on('click','#itinerary .btn-danger', function(){
+        var title = $(this).parent().find('span').text();
+        var optionType = $(this).closest('.itinerary-item').attr('id');
+        
+        removeRecord(optionType, title);
+        $(this).parent().empty();
+    });
+
+function removeRecord(optionType, title){
+  if(optionType === 'hItin'){
+    currentDay.hItin.forEach(function(h, index, arr){
+      if(h.name === title){
+        arr.splice(index, 1);
+      }
+    });
+  }
+  else if(optionType === 'rItin'){
+    currentDay.rItin.forEach(function(r, index, arr){
+      if(r.name === title){
+        arr.splice(index, 1);
+      }
+    });
+  }
+  else{
+    currentDay.aItin.forEach(function(a, index, arr){
+      if(a.name === title){
+        arr.splice(index, 1);
+      }
+    });
+  }
+}
+
 
 function getCurrentDay(){
   return Number($('.current-day').text());
