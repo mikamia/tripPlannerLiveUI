@@ -85,6 +85,17 @@ function setMapOnAll(map) {
 // Removes the markers from the map, but keeps them in the array.
 function clearMarkers() {
   setMapOnAll(null);
+  markers = [];
+}
+
+function clearMarker(location){
+  markers.forEach(function(marker){
+   var lat = marker.getPosition().lat();
+   var long = marker.getPosition().lng();
+    if(lat === location[0]){
+      marker.setMap(null);
+    }
+  })
 }
 
   //drawMarker('hotel', locationArr);

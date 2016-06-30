@@ -22,6 +22,7 @@ $(document).ready(function(){
     });
 
     var currentDay = days[getCurrentDay()-1];
+    setCurrentDay();
     console.log(currentDay);
     $('#options-panel .btn.btn-primary').click(function(){
         populateOptions($(this));
@@ -48,7 +49,7 @@ $(document).ready(function(){
     $(document).on('click','#itinerary .btn-danger', function(){
         var title = $(this).parent().find('span').text();
         var optionType = $(this).closest('.itinerary-item').attr('id');
-        
+
         removeRecord(optionType, title);
         $(this).parent().empty();
     });
@@ -58,6 +59,7 @@ function removeRecord(optionType, title){
     currentDay.hItin.forEach(function(h, index, arr){
       if(h.name === title){
         arr.splice(index, 1);
+        clearMarker(h.place.location);
       }
     });
   }
@@ -65,6 +67,7 @@ function removeRecord(optionType, title){
     currentDay.rItin.forEach(function(r, index, arr){
       if(r.name === title){
         arr.splice(index, 1);
+        clearMarker(r.place.location);
       }
     });
   }
@@ -72,6 +75,7 @@ function removeRecord(optionType, title){
     currentDay.aItin.forEach(function(a, index, arr){
       if(a.name === title){
         arr.splice(index, 1);
+        clearMarker(a.place.location);
       }
     });
   }
@@ -89,6 +93,8 @@ function setCurrentDay(){
   clearMarkers();
   drawAll(currentDay);
   addBackOptions();
+  $('#day-title').find('span').empty();
+  $('#day-title').find('span').text("Day " + getCurrentDay());
 }
 
 function updateCurrentDay(itinType, itinObjToPushIn){
