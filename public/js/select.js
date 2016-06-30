@@ -19,7 +19,7 @@ $(document).ready(function(){
       var selected = $(this).parent().find($('select'));
       var optionVal = selected.val(); //index of the array
       var optionType = selected.data('type'); //hotel
-
+      var locationArr;
       if(optionType === 'hotel'){
 
         //push into itinerary object
@@ -28,30 +28,49 @@ $(document).ready(function(){
         //update the itinerary div
         $(itinArray[0]).append("<span class='title'>" + hotels[optionVal].name + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
 
-        var locationArr = hotels[optionVal].place.location;
-        console.log(locationArr);
+          locationArr = hotels[optionVal].place.location;
         //initializeMap(locationArr);
-
         //update maps
+        drawMarker('hotel', locationArr);
 
       } else if (optionType === 'restaurant') {
         //push into itineary object
         rItin.push(restaurants[optionVal]);
 
-
-
         //update the itinerary div
         $(itinArray[1]).append("<span class='title'>" + restaurants[optionVal].name + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
 
+        locationArr = restaurants[optionVal].place.location;
         //update maps
+        drawMarker('restaurant', locationArr);
       } else {
         //push into itineary object
         aItin.push(activities[optionVal]);
         $(itinArray[2]).append("<span class='title'>" + activities[optionVal].name + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
+
+        locationArr = activities[optionVal].place.location;
+        //update maps
+        drawMarker('activity', locationArr);
+
+
       }
       //hotels[optionVal].place.location[0]
 
 
       //$this.val();
     })
+
+    //Itinerary Day
+    $('#day-add').click(function(){
+      var lastChild = $('.day-buttons button:nth-last-child(2)');
+      var newNum = Number(lastChild.text()) + 1;
+      var newButton = "<button class='btn btn-circle day-btn'>" + 
+      newNum + "</button>";
+      console.log(lastChild.text());
+      $(lastChild).after(newButton);
+    });
+
+    
+
+
 });
