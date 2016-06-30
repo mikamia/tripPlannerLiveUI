@@ -33,30 +33,32 @@ $(document).ready(function(){
       if(optionType === 'hotel'){
 
         //push into itinerary object
-        currentDay.hItin.push(hotels[optionVal]);
+        updateCurrentDay(currentDay.hItin, hotels[optionVal]);
 
         //update the itinerary div
-        $(itinArray[0]).append("<span class='title'>" + hotels[optionVal].name + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
+        updateItinDiv(0,hotels[optionVal].name);
 
-          locationArr = hotels[optionVal].place.location;
+        locationArr = hotels[optionVal].place.location;
         //initializeMap(locationArr);
         //update maps
         drawMarker('hotel', locationArr);
 
       } else if (optionType === 'restaurant') {
-        //push into itineary object
-        currentDay.rItin.push(restaurants[optionVal]);
+        //push into itinerary object
+        updateCurrentDay(currentDay.rItin, restaurants[optionVal]);
 
         //update the itinerary div
-        $(itinArray[1]).append("<span class='title'>" + restaurants[optionVal].name + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
+        updateItinDiv(1,restaurants[optionVal].name);
+
 
         locationArr = restaurants[optionVal].place.location;
         //update maps
         drawMarker('restaurant', locationArr);
       } else {
-        //push into itineary object
-        currentDay.aItin.push(activities[optionVal]);
-        $(itinArray[2]).append("<span class='title'>" + activities[optionVal].name + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
+        //push into itinerary object
+        updateCurrentDay(currentDay.aItin, activities[optionVal]);
+        //update the itinerary div
+        updateItinDiv(2,activities[optionVal].name);
 
         locationArr = activities[optionVal].place.location;
         //update maps
@@ -64,22 +66,24 @@ $(document).ready(function(){
       }
     })
 
-    $('.day-btn').click(function(){
+    $(document).on('click', '.day-btn', function(){
       if($(this).is('#day-add')) return;
       if($(this).hasClass('current-day')) return;
       $(this).closest('.day-buttons').find('.day-btn.current-day').removeClass('current-day');
       $(this).addClass('current-day');
       setCurrentDay();
       console.log(currentDay);
+
     });
+
     //Itinerary Day
-    $('#day-add').click(function(){
+    $('#day-add').on('click',function(){
       var lastChild = $('.day-buttons button:nth-last-child(2)');
       var newNum = Number(lastChild.text()) + 1;
-      var newButton = "<button class='btn btn-circle day-btn'>" + 
+      var newButton = "<button class='btn btn-circle day-btn'>" +
       newNum + "</button>";
       $(lastChild).after(newButton);
-      getCurrentDay();
+      days.push(new Day());
     });
 
 function getCurrentDay(){
@@ -88,6 +92,18 @@ function getCurrentDay(){
 
 function setCurrentDay(){
   currentDay = days[getCurrentDay()-1];
+  var itinArray = $('.itinerary-item');
+  itinArray.empty();
+  clearMarkers();
+}
+
+function updateCurrentDay(itinType, itinObjToPushIn){
+  itinType.push(itinObjToPushIn);
+}
+
+function updateItinDiv(index, text){
+  var itinArray = $('.itinerary-item');
+  $(itinArray[index]).append("<span class='title'>" + text + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
 }
 
 

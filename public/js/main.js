@@ -1,5 +1,6 @@
 var mapCanvas = document.getElementById('map-canvas');
 var currentMap;
+var markers = [];
 
 var styleArr = [{
     featureType: 'landscape',
@@ -43,7 +44,29 @@ function drawMarker (type, coords) {
     icon: iconURL,
     position: latLng
   });
+  markers.push(marker);
   marker.setMap(currentMap);
+}
+
+// Adds a marker to the map and push to the array.
+function addMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+  markers.push(marker);
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
 }
 
   //drawMarker('hotel', locationArr);
