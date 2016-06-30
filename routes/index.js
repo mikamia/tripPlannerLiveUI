@@ -27,18 +27,17 @@ router.get('/', function (req, res, next) {
             findingRestaurants
         ])
         .spread(function (hotels, activities, restaurants) {
-            // res.render('index', {
-            //     hotels: hotels,
-            //     activities: activities,
-            //     restaurants: restaurants
-            // });
-            selectItems = {hotels: hotels,
-                 activities: activities,
-                 restaurants: restaurants};
-            res.render('index');
+            res.render('index', {
+                hotels: hotels,
+                activities: activities,
+                restaurants: restaurants
+            });
+            // selectItems = {hotels: hotels,
+            //      activities: activities,
+            //      restaurants: restaurants};
+            // res.render('index');
         })
         .catch(next);
 
 });
-module.exports = {router: router,
-                selectItems: selectItems};
+module.exports = router;
