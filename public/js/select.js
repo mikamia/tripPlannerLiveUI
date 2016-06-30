@@ -24,47 +24,8 @@ $(document).ready(function(){
     var currentDay = days[getCurrentDay()-1];
     console.log(currentDay);
     $('#options-panel .btn.btn-primary').click(function(){
-      var itinArray = $('.itinerary-item');
-      var selected = $(this).parent().find($('select'));
-      var optionVal = selected.val(); //index of the array
-      var optionType = selected.data('type'); //hotel
-      var locationArr;
-
-      if(optionType === 'hotel'){
-
-        //push into itinerary object
-        updateCurrentDay(currentDay.hItin, hotels[optionVal]);
-
-        //update the itinerary div
-        updateItinDiv(0,hotels[optionVal].name);
-
-        locationArr = hotels[optionVal].place.location;
-        //initializeMap(locationArr);
-        //update maps
-        drawMarker('hotel', locationArr);
-
-      } else if (optionType === 'restaurant') {
-        //push into itinerary object
-        updateCurrentDay(currentDay.rItin, restaurants[optionVal]);
-
-        //update the itinerary div
-        updateItinDiv(1,restaurants[optionVal].name);
-
-
-        locationArr = restaurants[optionVal].place.location;
-        //update maps
-        drawMarker('restaurant', locationArr);
-      } else {
-        //push into itinerary object
-        updateCurrentDay(currentDay.aItin, activities[optionVal]);
-        //update the itinerary div
-        updateItinDiv(2,activities[optionVal].name);
-
-        locationArr = activities[optionVal].place.location;
-        //update maps
-        drawMarker('activity', locationArr);
-      }
-    })
+        populateOptions($(this));
+      });
 
     $(document).on('click', '.day-btn', function(){
       if($(this).is('#day-add')) return;
@@ -95,6 +56,8 @@ function setCurrentDay(){
   var itinArray = $('.itinerary-item');
   itinArray.empty();
   clearMarkers();
+  drawAll(currentDay);
+  addBackOptions();
 }
 
 function updateCurrentDay(itinType, itinObjToPushIn){
@@ -104,6 +67,72 @@ function updateCurrentDay(itinType, itinObjToPushIn){
 function updateItinDiv(index, text){
   var itinArray = $('.itinerary-item');
   $(itinArray[index]).append("<span class='title'>" + text + "</span><button class='btn btn-xs btn-danger remove btn-circle'>x</button>");
+}
+
+function addBackOptions(){
+  currentDay.hItin.forEach(function(h){
+    addHotel(h, true);
+  });
+  currentDay.rItin.forEach(function(r){
+    addRestaurant(r, true);
+  });
+  currentDay.aItin.forEach(function(a){
+    addActivity(a, true);
+  });
+}
+
+function addHotel(hotel, addBack ){
+    if(!addBack){
+      updateCurrentDay(currentDay.hItin, hotel);
+    }
+    //update the itinerary div
+    updateItinDiv(0,hotel.name);
+
+    //initializeMap(locationArr);
+    locationArr = hotel.place.location;
+    //update maps
+    drawMarker('hotel', locationArr);
+}
+
+function addRestaurant(restaurant, addBack){
+  if(!addBack){
+    updateCurrentDay(currentDay.rItin, restaurant);
+  }
+    //update the itinerary div
+    updateItinDiv(1,restaurant.name);
+    locationArr = restaurant.place.location;
+    //update maps
+    drawMarker('restaurant', locationArr);
+}
+
+function addActivity(activity, addBack){
+  if(!addBack){
+   updateCurrentDay(currentDay.aItin, activity);
+  }
+    //update the itinerary div
+    updateItinDiv(2,activity.name);
+
+    locationArr = activity.place.location;
+    //update maps
+    drawMarker('activity', locationArr);
+}
+
+
+
+function populateOptions(clicked){
+  //var itinArray = $('.itinerary-item');
+  var selected = $(clicked).parent().find($('select'));
+  var optionVal = selected.val(); //index of the array
+  var optionType = selected.data('type'); //hotel
+  var locationArr;
+
+  if(optionType === 'hotel'){
+    addHotel(hotels[optionVal], false);
+  } else if (optionType === 'restaurant') {
+    addRestaurant(restaurants[optionVal], false);
+  } else {
+    addActivity(activities[optionVal], false);
+  }
 }
 
 

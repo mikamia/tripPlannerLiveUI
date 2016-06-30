@@ -48,6 +48,24 @@ function drawMarker (type, coords) {
   marker.setMap(currentMap);
 }
 
+function drawAll(currentDay){
+  //hotel
+  currentDay.hItin.forEach(function(h){
+    var location = h.place.location;
+    drawMarker('hotel', location);
+  });
+  //restaurants
+  currentDay.rItin.forEach(function(r){
+    var location = r.place.location;
+    drawMarker('restaurant', location);
+  });
+  //activities
+  currentDay.aItin.forEach(function(a){
+    var location = a.place.location;
+    drawMarker('activity', location);
+  });
+}
+
 // Adds a marker to the map and push to the array.
 function addMarker(location) {
   var marker = new google.maps.Marker({
